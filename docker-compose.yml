@@ -1,0 +1,8 @@
+version: '3.8'
+
+services:
+  go-template:
+    image: ghcr.io/ci4rail/go-template:latest
+    container_name: go-template
+    command: ""
+    network_mode: host

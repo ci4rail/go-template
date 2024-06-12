@@ -1,6 +1,6 @@
 module github.com/ci4rail/go-template
 
-go 1.22.3
+go 1.20
 
 require (
 	go.uber.org/automaxprocs v1.5.3

@@ -1,4 +1,4 @@
-name: CI
+name: Release Workflow
 
 on:
   pull_request:
@@ -9,10 +9,8 @@ on:
     branches: ["main"]
     paths-ignore: ["docs/**"]
 
-  # Allows you to run this workflow manually from the Actions tab
   workflow_dispatch:
 
-  # Trigger when a new release is published
   release:
     types: [published]
 
@@ -25,21 +23,20 @@ jobs:
     runs-on: ${{ matrix.os }}
 
     steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+
       - name: Install Go
-        uses: actions/setup-go@v3
+        uses: actions/setup-go@v4
         with:
           go-version: ${{ matrix.go-version }}
-
-      - name: Checkout code
-        uses: actions/checkout@v3
 
       - name: Set up Go environment
         run: |
           mkdir -p ~/go/bin
           echo "~/go/bin" >> $GITHUB_PATH
-          
-      # Cache Go modules
-      - uses: actions/cache@v3
+
+      - uses: actions/cache@v4
         with:
           path: |
             ~/go/pkg/mod
@@ -57,62 +54,62 @@ jobs:
       - name: Run all tests
         run: make test
 
-  build-and-release:
+  create-release:
+    name: release
     runs-on: ubuntu-latest
-    needs: test
+
+    outputs:
+      new_release_version: ${{ steps.semantic-release.outputs.new_release_version }}
+
     steps:
-      - name: Checkout code
-        uses: actions/checkout@v3
+      - name: Checkout repository
+        uses: actions/checkout@v4
 
-      - name: Set up Docker Buildx
-        uses: docker/setup-buildx-action@v2
-
-      - name: Login to GitHub Container Registry
-        run: echo "${{ secrets.GITHUB_TOKEN }}" | docker login ghcr.io -u ${{ github.actor }} --password-stdin
-
-      - name: Build Docker image
-        run: make docker
-
-      - name: Push Docker image to GitHub Container Registry
-        env:
-          IMAGE_NAME: ghcr.io/${{ github.repository_owner }}/${{ github.event.repository.name }}
-        run: |
-          docker tag $(DOCKER_REPO):$(DOCKER_TAG) $IMAGE_NAME:latest
-          docker push $IMAGE_NAME:latest
-
-  semantic-release:
-    runs-on: ubuntu-latest
-    needs: build-and-release
-    steps:
-      - name: Checkout code
-        uses: actions/checkout@v3
-
-      - name: Install Node.js
-        uses: actions/setup-node@v3
+      - name: Set up Node.js
+        uses: actions/setup-node@v4
         with:
-          node-version: '16'
+          node-version: '20'
 
       - name: Install dependencies
         run: npm install
 
       - name: Run semantic-release
+        id: semantic-release
+        uses: cycjimmy/semantic-release-action@v4.1.0
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-        run: npx semantic-release
 
-  create-release:
+  release-docker:
     runs-on: ubuntu-latest
-    needs: semantic-release
+    needs: 
+      - test
+      - create-release
+    outputs:
+      docker_image: ${{ steps.build-and-upload.outputs.docker_image}}
     steps:
       - name: Checkout code
-        uses: actions/checkout@v3
+        uses: actions/checkout@v4
 
-      - name: Create GitHub release
-        uses: actions/create-release@v1
+      - name: Set up Docker Buildx
+        uses: docker/setup-buildx-action@v3
+
+      - name: Login to GitHub Container Registry
+        run: echo "${{ secrets.GITHUB_TOKEN }}" | docker login ghcr.io -u ${{ github.actor }} --password-stdin
+
+      - name: Build and Load Docker image
         env:
-          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-        with:
-          tag_name: ${{ steps.semantic-release.outputs.nextRelease.version }}
-          release_name: Release ${{ steps.semantic-release.outputs.nextRelease.version }}
-          draft: false
-          prerelease: false
+          IMAGE_NAME: ghcr.io/${{ github.repository_owner }}/${{ github.event.repository.name }}
+          IMAGE_TAG: ${{ needs.create-release.outputs.new_release_version }}
+        run: |
+          docker buildx build --load -t $IMAGE_NAME:$IMAGE_TAG .
+
+      - name: Tag and Push Docker image
+        id: build-and-upload
+        env:
+          IMAGE_NAME: ghcr.io/${{ github.repository_owner }}/${{ github.event.repository.name }}
+          IMAGE_TAG: ${{ needs.create-release.outputs.new_release_version }}
+        run: |
+          docker tag $IMAGE_NAME:$IMAGE_TAG $IMAGE_NAME:latest
+          docker push $IMAGE_NAME:latest
+          docker push $IMAGE_NAME:$IMAGE_TAG
+          echo "docker_image=$IMAGE_NAME:$IMAGE_TAG" >> "$GITHUB_OUTPUT"
