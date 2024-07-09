@@ -1,3 +1,11 @@
+# 1.0.0 (2024-07-09)
+
+
+### Features
+
+* go-template with docker-compose and tilt ([ef55369](https://github.com/ci4rail/go-template/commit/ef55369ae02fd292a5358999822126520cde0841))
+* inital template ([e3c0317](https://github.com/ci4rail/go-template/commit/e3c0317c690159ac824663fbc5c811cc43c6eac5))
+
 ## [1.0.22](https://github.com/ci4rail/go-template/compare/v1.0.21...v1.0.22) (2024-07-07)
 
 
