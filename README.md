@@ -1,7 +1,5 @@
 # go-template
 
-[![GoTemplate](https://img.shields.io/badge/go/template-black?logo=go)](https://github.com/SchwarzIT/go-template)
-
 a go-template project
 
 The project uses `make` to make your life easier. If you're not familiar with Makefiles you can take a look at [this quickstart guide](https://makefiletutorial.com).
@@ -14,9 +12,8 @@ make help
 
 ## Bootstrap
 
-When moving a go project you have to adjust the module paths.
-
-Search for `github.com/ci4rail/go-template` and replace with your new module url.
+When moving a go project you have to adjust the module path and docker image name.
+Search for `ci4rail/go-template` and replace all matches with your new repository.
 
 ## Setup
 

@@ -3,7 +3,7 @@ PWD = $(shell pwd)
 
 # constants
 GOLANGCI_VERSION = 1.59.1
-DOCKER_REPO = go-template
+DOCKER_REPO = ghcr.io/ci4rail/go-template
 DOCKER_TAG = latest
 
 all: git-hooks  tidy ## Initializes all tools

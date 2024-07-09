@@ -1,8 +1,8 @@
 # -*- mode: Python -*-
 
-docker_compose("./docker-compose.yml")
+docker_compose("./manifest/docker-compose.yml")
 
 docker_build(
-    'go-template',
+    'ghcr.io/ci4rail/go-template:latest',
     '.'
 )
