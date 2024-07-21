@@ -4,7 +4,6 @@ import (
 	"fmt"
 	"os"
 
-	"github.com/ci4rail/go-template/internal/log"
 	"go.uber.org/zap"
 
 	// This controls the maxprocs environment variable in container runtimes.
@@ -20,7 +19,7 @@ func main() {
 }
 
 func run() error {
-	logger, err := log.NewAtLevel(os.Getenv("LOG_LEVEL"))
+	logger, err := newJSONLogger(os.Getenv("LOG_LEVEL"))
 	if err != nil {
 		return err
 	}
@@ -32,4 +31,17 @@ func run() error {
 	logger.Info("Hello world!", zap.String("location", "world"))
 
 	return err
+}
+
+func newJSONLogger(level string) (*zap.Logger, error) {
+	config := zap.NewProductionConfig()
+	if level != "" {
+		var zapLevel zap.AtomicLevel
+		err := zapLevel.UnmarshalText([]byte(level))
+		if err != nil {
+			return nil, err
+		}
+		config.Level = zapLevel
+	}
+	return config.Build()
 }
