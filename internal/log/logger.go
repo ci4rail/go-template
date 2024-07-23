@@ -5,6 +5,7 @@ import (
 	"go.uber.org/zap/zapcore"
 )
 
+// NewAtLevel creates a new logger at the specified level.
 func NewAtLevel(levelStr string) (*zap.Logger, error) {
 	logLevel := zapcore.InfoLevel
 	if levelStr != "" {
