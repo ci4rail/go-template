@@ -5,8 +5,9 @@ PWD = $(shell pwd)
 GOLANGCI_VERSION = 1.59.1
 DOCKER_REPO = ghcr.io/ci4rail/go-template
 DOCKER_TAG = latest
+PLATFORMS = linux/amd64,linux/arm64
 
-all: git-hooks  tidy ## Initializes all tools
+all: git-hooks tidy ## Initializes all tools
 
 out:
 	@mkdir -p out
@@ -69,7 +70,7 @@ clean: ## Cleans up everything
 	@rm -rf bin out 
 
 docker: ## Builds docker image
-	docker buildx build -t $(DOCKER_REPO):$(DOCKER_TAG) .
+	docker buildx build --platform $(PLATFORMS) -t $(DOCKER_REPO):$(DOCKER_TAG) --push .
 
 ci: lint-reports test-reports ## Executes lint and test and generates reports
 
