@@ -2,7 +2,7 @@
 
 a go-template project
 
-The project uses `make` to make your life easier. If you're not familiar with Makefiles you can take a look at [this quickstart guide](https://makefiletutorial.com).
+The project uses `make` to make your life easier. 
 
 Whenever you need help regarding the available actions, just use the following command.
 
@@ -38,4 +38,12 @@ Run tests
 
 ```bash
 make test
+```
+
+## create multiarch docker image
+
+Run docker build and push
+
+```bash
+make docker
 ```
