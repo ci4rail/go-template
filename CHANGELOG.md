@@ -1,3 +1,10 @@
+## [1.2.1](https://github.com/ci4rail/go-template/compare/v1.2.0...v1.2.1) (2024-07-25)
+
+
+### Bug Fixes
+
+* force build ([4c8f283](https://github.com/ci4rail/go-template/commit/4c8f283348276159c3a9d4330317f0250cbec533))
+
 # [1.2.0](https://github.com/ci4rail/go-template/compare/v1.1.1...v1.2.0) (2024-07-25)
 
 
