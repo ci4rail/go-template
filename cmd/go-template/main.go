@@ -10,24 +10,16 @@ import (
 	"github.com/prometheus/client_golang/prometheus/promhttp"
 	"go.uber.org/zap"
 
-	// This controls the maxprocs environment variable in container runtimes.
-	// see https://martin.baillie.id/wrote/gotchas-in-the-go-network-packages-defaults/#bonus-gomaxprocs-containers-and-the-cfs
 	_ "go.uber.org/automaxprocs"
 )
 
-var (
-	sensorValue = prometheus.NewGaugeVec(
-		prometheus.GaugeOpts{
-			Name: "sensor_value",
-			Help: "Current value of the sensor",
-		},
-		[]string{"sensor"},
-	)
+const (
+	sensorUpdateInterval = 10 * time.Second
+	readTimeout          = 5 * time.Second
+	writeTimeout         = 10 * time.Second
+	idleTimeout          = 120 * time.Second
+	exampleSensorValue   = 42.0
 )
-
-func init() {
-	prometheus.MustRegister(sensorValue)
-}
 
 func main() {
 	if err := run(); err != nil {
@@ -49,23 +41,45 @@ func run() error {
 		}
 	}()
 
+	sensorValue := prometheus.NewGaugeVec(
+		prometheus.GaugeOpts{
+			Name: "sensor_value",
+			Help: "Current value of the sensor",
+		},
+		[]string{"sensor"},
+	)
+	prometheus.MustRegister(sensorValue)
+
 	http.Handle("/metrics", promhttp.Handler())
-	go func() {
-		for {
-			// Fetch and update the sensor values here
-			value := getSensorValue("sensor1")
-			sensorValue.WithLabelValues("sensor1").Set(value)
-			logger.Info("Sensor value updated", zap.String("sensor", "sensor1"), zap.Float64("value", value))
 
-			// Add logic for other sensors as needed
+	go updateSensorValues(sensorValue, logger)
 
-			// Sleep for a certain interval before fetching the values again
-			time.Sleep(10 * time.Second)
-		}
-	}()
+	srv := &http.Server{
+		Addr:         ":8080",
+		Handler:      nil, // Default handler
+		ReadTimeout:  readTimeout,
+		WriteTimeout: writeTimeout,
+		IdleTimeout:  idleTimeout,
+	}
+
+	if err := srv.ListenAndServe(); err != nil {
+		logger.Fatal("Failed to start server")
+	}
 
 	logger.Info("Starting server on :8080")
-	return http.ListenAndServe(":8080", nil)
+	return nil
+}
+
+func updateSensorValues(sensorValue *prometheus.GaugeVec, logger *zap.Logger) {
+	for {
+		value := getSensorValue("sensor1")
+		sensorValue.WithLabelValues("sensor1").Set(value)
+		logger.Info("Sensor value updated", zap.String("sensor", "sensor1"), zap.Float64("value", value))
+
+		// Add logic for other sensors as needed
+
+		time.Sleep(sensorUpdateInterval)
+	}
 }
 
 func newJSONLogger(level string) (*zap.Logger, error) {
@@ -81,8 +95,8 @@ func newJSONLogger(level string) (*zap.Logger, error) {
 	return config.Build()
 }
 
-func getSensorValue(sensor string) float64 {
+func getSensorValue(_ string) float64 {
 	// Implement the logic to fetch the sensor values here
 	// Example: returning a dummy value
-	return 42.0 // Example value
+	return exampleSensorValue
 }
