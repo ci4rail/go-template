@@ -1,3 +1,10 @@
+# [1.2.0](https://github.com/ci4rail/go-template/compare/v1.1.1...v1.2.0) (2024-07-25)
+
+
+### Features
+
+* multiarch images for amd64 and arm64 ([4bc2212](https://github.com/ci4rail/go-template/commit/4bc2212d8a2b9b679598b75dcb4a408fe4cf1045))
+
 ## [1.1.1](https://github.com/ci4rail/go-template/compare/v1.1.0...v1.1.1) (2024-07-23)
 
 
