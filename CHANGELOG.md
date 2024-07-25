@@ -1,3 +1,10 @@
+## [1.1.1](https://github.com/ci4rail/go-template/compare/v1.1.0...v1.1.1) (2024-07-23)
+
+
+### Bug Fixes
+
+* golang-lint ([a149ac4](https://github.com/ci4rail/go-template/commit/a149ac4122d9c0b75faafbee28d946886a18c1b6))
+
 # [1.1.0](https://github.com/ci4rail/go-template/compare/v1.0.2...v1.1.0) (2024-07-23)
 
 
