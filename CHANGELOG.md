@@ -1,3 +1,10 @@
+# [1.4.0](https://github.com/ci4rail/go-template/compare/v1.3.0...v1.4.0) (2024-08-22)
+
+
+### Features
+
+* execute test on push and added build pipeline for PR ([096bf0c](https://github.com/ci4rail/go-template/commit/096bf0c1ae16ed8811fb66192ffa4737cb03f8f1))
+
 # [1.3.0](https://github.com/ci4rail/go-template/compare/v1.2.1...v1.3.0) (2024-07-30)
 
 
