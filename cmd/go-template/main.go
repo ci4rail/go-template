@@ -18,7 +18,7 @@ const (
 	readTimeout          = 5 * time.Second
 	writeTimeout         = 10 * time.Second
 	idleTimeout          = 120 * time.Second
-	exampleSensorValue   = 42.0
+	exampleSensorValue   = 43.0
 )
 
 func main() {
