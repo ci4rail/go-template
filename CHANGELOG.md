@@ -1,3 +1,10 @@
+# [1.3.0](https://github.com/ci4rail/go-template/compare/v1.2.1...v1.3.0) (2024-07-30)
+
+
+### Features
+
+* multiarch images for raspberry pi 4 - linux/arm/v7 ([86b60e4](https://github.com/ci4rail/go-template/commit/86b60e4586a970e514c0a3094d32b4f5fe3a5977))
+
 ## [1.2.1](https://github.com/ci4rail/go-template/compare/v1.2.0...v1.2.1) (2024-07-25)
 
 
