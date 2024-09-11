@@ -1,3 +1,20 @@
+# [1.5.0](https://github.com/ci4rail/go-template/compare/v1.4.0...v1.5.0) (2024-09-11)
+
+
+### Bug Fixes
+
+* make lint ([c319fe9](https://github.com/ci4rail/go-template/commit/c319fe9e50d783a765d3151e8992966919db58b5))
+* pre push hooks ([32d12c7](https://github.com/ci4rail/go-template/commit/32d12c726e0537b323291612be57c66f56590e7d))
+* precommit ([aea4ce1](https://github.com/ci4rail/go-template/commit/aea4ce13dea25a648a20474aaf1a94b3d2d7ff47))
+* release ([caca37b](https://github.com/ci4rail/go-template/commit/caca37badf16baf7ac6fdc83af5d305d852f72d1))
+* release ([f20d3a2](https://github.com/ci4rail/go-template/commit/f20d3a225d1002ef25232784ea69d73892182b40))
+* release ([2c64ad4](https://github.com/ci4rail/go-template/commit/2c64ad4b49dcb884c4bc8df8309fc96436cf627f))
+
+
+### Features
+
+* splitted tilt file ([fbde49f](https://github.com/ci4rail/go-template/commit/fbde49fdd76b5cbc170a257812f8e273bb9698cb))
+
 # [1.4.0](https://github.com/ci4rail/go-template/compare/v1.3.0...v1.4.0) (2024-08-22)
 
 
