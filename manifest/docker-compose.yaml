@@ -1,8 +1,7 @@
 version: '3.8'
-
 services:
   go-template:
-    image: ${DOCKER_IMAGE_NAME:-ghcr.io/ci4rail/go-template}:${DOCKER_IMAGE_TAG:-latest}
+    image: ${GOTEMPLATE:-gotemplate}
     ports:
       - "8080:8080"
     command: ["/app"]
